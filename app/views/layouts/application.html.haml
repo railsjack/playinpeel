@@ -1,0 +1,349 @@
+!!!
+%html.no-js{lang: 'en'}
+  %head
+    %meta{charset: "utf-8"}/
+    %meta{content: 'width=device-width, initial-scale=1.0', name: 'viewport'}
+    %title= content_for?(:title) ? yield(:title) : I18n.t('brand.name')
+    %meta{content: (content_for?(:description) ? yield(:description) : I18n.t('brand.name')), name: 'description'}
+    /= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
+    /[if lt IE 9]
+      = javascript_include_tag 'ie', 'data-turbolinks-track' => true
+    /= javascript_include_tag 'head', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    /= headjs_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+    %link{:href => "/styles/bootstrap.min.css", :rel => "stylesheet"}/
+    %link{:href => "/styles/datepicker.css", :rel => "stylesheet"}/
+    %link{:href => "/styles/pcyi.css", :rel => "stylesheet"}/
+    %link{:href => "https://ajax.aspnetcdn.com/ajax/jquery.ui/1.10.3/themes/flick/jquery-ui.css", :rel => "stylesheet"}/
+
+    %script{:charset => "UTF-8", :src => "//ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0", :type => "text/javascript"}
+    %script{:src => "//ecn.dev.virtualearth.net/mapcontrol/v7.0/7.0.20141118162111.86/js/en-us/veapicore.js", :type => "text/javascript"}
+
+    = yield :head
+    = render 'layouts/airbrake'
+  %body{class: "controller__#{controller_name} action__#{action_name}"}
+    = render 'layouts/navigation'
+    .container
+      .errors__container
+        = render 'layouts/messages'
+
+
+
+    = yield
+
+
+
+    .container{"data-bind" => "visible: isListVisible", style: "display: none;"}
+      / Header Start
+      .row
+        .col-md-2.col-sm-3.col-xs-3
+          %img.logo{:src => "/styles/images/PLAY_logo.png"}/
+          %button.btn.btn-info.btn-top-search.btn-search.visible-xs{"data-bind" => "click: doSearch", "data-loading-text" => "loading...", :style => "margin-top:4px"} Search
+        .col-md-8.col-sm-6.col-xs-9.form-horizontal
+          .form-group
+            .col-md-12
+              .input-group
+                %span.input-group-addon
+                  %span.glyphicon.glyphicon-map-marker
+                %input#address.form-control{"data-bind" => "value: searchOptions().address,  popover: '#addressSuggestionTemplate', event: { keyup: searchOptions().addressChanged }", :placeholder => "Address...", :type => "text"}/
+          .form-group
+            .col-md-12
+              .input-group
+                %span.input-group-addon
+                  %span.glyphicon.glyphicon-search
+                %input#searchKeywords.form-control{"data-bind" => "value: searchOptions().keywords ,event: {keyup: submitOnEnter}", :placeholder => "Keyword search...", :type => "search"}/
+        .col-md-2.col-sm-3.col-xs-12.hidden-xs
+          %button.btn.btn-info.btn-top-search.btn-search{"data-bind" => "click: doSearch", "data-loading-text" => "loading..."} Search
+      .row
+        .col-md-2.col-sm-2.visible-md.visible-lg
+          .addthis_toolbox.addthis_default_style.addthis_32x32_style.add_this.share-box
+            %a.addthis_button_facebook
+            %a.addthis_button_twitter
+            %a.addthis_button_google
+            %a.addthis_button_compact
+        .col-md-9.col-xs-12.intro
+          %blockquote
+            .small-font-size.hidden-xs Play in Peel is a web app that allows you to search for recreation, arts, culture and library activities in the City of Mississauga, the City of Brampton and the town of Caledon. Access on your computer, smart phone or tablet to enter your search terms and click to see what’s available.
+            %small
+              Brought to you by the
+              %strong Peel Children and Youth Initiative
+              in partnership with
+              %strong Microsoft
+      / Header End
+    %hr.page-break{"data-bind" => "visible: isListVisible"}/
+    .container.search-container{"data-bind" => "visible: isListVisible", :style => "display:none;"}
+      .row
+        .col-md-2.col-sm-3.col-xs-12
+          / Search Options Start
+          .well.well-sm.search-options
+            .title
+              %i#expand-search-options.glyphicon.glyphicon-minus
+              Options
+              %i#search-tooltip.glyphicon.glyphicon-question-sign
+            %hr.divider/
+            #all-search-options
+              %div Age:
+              %div{:style => "float:left;margin-right:30px"}
+                From:
+                %span{"data-bind" => "text: searchOptions().ageFrom()"}
+              %div
+                To:
+                %span{"data-bind" => "text: searchOptions().displayAgeTo()"}
+              #ageRange.search-slider
+              %hr.divider/
+              %div Date Range:
+              .input-group{"data-bind" => "attr: { 'data-date': searchOptions().dateFrom() }"}
+                %input#dateFrom.form-control.input-sm{"data-bind" => "value: searchOptions().dateFrom()", :placeholder => "from...", :type => "text"}/
+                %span.input-group-addon
+                  %span.glyphicon.glyphicon-calendar
+              .input-group{"data-bind" => "attr: { 'data-date': searchOptions().dateTo() }"}
+                %input#dateTo.form-control.input-sm{"data-bind" => "value: searchOptions().dateTo()", :placeholder => "to...", :type => "text"}/
+                %span.input-group-addon
+                  %span.glyphicon.glyphicon-calendar
+              %hr.divider/
+              %div Activity Type:
+              .input-group
+                %input.form-control.dummy-readonly{:readonly => "readonly", :type => "text", :value => "Registration"}/
+                %span.input-group-addon
+                  %input{"data-bind" => "checked: searchOptions().activityTypes()[0].checked", :type => "checkbox"}/
+              .input-group
+                %input.form-control.dummy-readonly{:readonly => "readonly", :type => "text", :value => "Drop-In"}/
+                %span.input-group-addon
+                  %input{"data-bind" => "checked: searchOptions().activityTypes()[1].checked", :type => "checkbox"}/
+              %hr.divider/
+              %div Time of Day:
+              .input-group
+                %input.form-control.dummy-readonly{:readonly => "readonly", :type => "text", :value => "AM"}/
+                %span.input-group-addon
+                  %input{"data-bind" => "checked: searchOptions().timesOfDay()[0].checked", :type => "checkbox"}/
+              .input-group
+                %input.form-control.dummy-readonly{:readonly => "readonly", :type => "text", :value => "PM"}/
+                %span.input-group-addon
+                  %input{"data-bind" => "checked: searchOptions().timesOfDay()[1].checked", :type => "checkbox"}/
+              %hr.divider/
+              %div Days:
+              .input-group
+                %input.form-control.dummy-readonly{:readonly => "readonly", :type => "text", :value => "Monday"}/
+                %span.input-group-addon
+                  %input{"data-bind" => "checked: searchOptions().days()[0].checked", :type => "checkbox"}/
+              .input-group
+                %input.form-control.dummy-readonly{:readonly => "readonly", :type => "text", :value => "Tuesday"}/
+                %span.input-group-addon
+                  %input{"data-bind" => "checked: searchOptions().days()[1].checked", :type => "checkbox"}/
+              .input-group
+                %input.form-control.dummy-readonly{:readonly => "readonly", :type => "text", :value => "Wednesday"}/
+                %span.input-group-addon
+                  %input{"data-bind" => "checked: searchOptions().days()[2].checked", :type => "checkbox"}/
+              .input-group
+                %input.form-control.dummy-readonly{:readonly => "readonly", :type => "text", :value => "Thursday"}/
+                %span.input-group-addon
+                  %input{"data-bind" => "checked: searchOptions().days()[3].checked", :type => "checkbox"}/
+              .input-group
+                %input.form-control.dummy-readonly{:readonly => "readonly", :type => "text", :value => "Friday"}/
+                %span.input-group-addon
+                  %input{"data-bind" => "checked: searchOptions().days()[4].checked", :type => "checkbox"}/
+              .input-group
+                %input.form-control.dummy-readonly{:readonly => "readonly", :type => "text", :value => "Saturday"}/
+                %span.input-group-addon
+                  %input{"data-bind" => "checked: searchOptions().days()[5].checked", :type => "checkbox"}/
+              .input-group
+                %input.form-control.dummy-readonly{:readonly => "readonly", :type => "text", :value => "Sunday"}/
+                %span.input-group-addon
+                  %input{"data-bind" => "checked: searchOptions().days()[6].checked", :type => "checkbox"}/
+              %hr.divider/
+              %button#searchbtn2.btn.btn-info.btn-search{"data-bind" => "click: doSearch", "data-loading-text" => "loading...", :type => "submit"} Apply..
+              .clear
+          / Search Options End
+        .col-md-10.col-sm-9.col-xs-12
+          #page-message.hide
+          #activities-result.activities{"data-bind" => "foreach: activities, visible: activities().length > 0", :style => "display:none"}
+            .row.activity{"data-bind" => "click: $root.goToActivity"}
+              .col-md-3.col-sm-4.schedule.link
+                .heading
+                  %i
+                  %span{"data-bind" => "text: displayDate(SelectedTime.StartDate)"}
+                  \-
+                  %span{"data-bind" => "text: displayDate(SelectedTime.EndDate)"}
+                .days
+                  %span{"data-bind" => "visible: SelectedTime.Monday"} Mondays,
+                  %span{"data-bind" => "visible: SelectedTime.Tuesday"} Tuesdays,
+                  %span{"data-bind" => "visible: SelectedTime.Wednesday"} Wednesdays,
+                  %span{"data-bind" => "visible: SelectedTime.Thursday"} Thursdays,
+                  %span{"data-bind" => "visible: SelectedTime.Friday"} Fridays,
+                  %span{"data-bind" => "visible: SelectedTime.Saturday"} Saturdays,
+                  %span{"data-bind" => "visible: SelectedTime.Sunday"} Sundays
+                  %br/
+                  %span{"data-bind" => "text: displayTime(SelectedTime.StartDate)"}
+                  \-
+                  %span{"data-bind" => "text: displayTime(SelectedTime.EndDate)"}
+                %span.clickable{"data-bind" => "visible: Times.length > 1"} More dates available
+              .col-md-6.col-sm-8.info1.linkclass
+                %h4
+                  %span.clickable{"data-bind" => "html: Name"}
+                %p{"data-bind" => "text: Description.trimToLength(150)"}
+                .hidden-xs
+                  %span.label.label-primary{"data-bind" => "visible: DropIn"} DROP-IN
+                  %span.clickable.pull-right more details
+              .col-md-3.col-sm-13.info2
+                %p
+                  At
+                  %strong{"data-bind" => "text: Resource.Facility.Name"}
+                  %br/
+                  %span{"data-bind" => "text: Resource.Facility.Address"}
+                  %br/
+                  %a{"data-bind" => "attr: { href: mapUrlTemplate.replace('#LOCATION#', Resource.Facility.Address) }", :target => "_blank"} map
+                .pull-right.visible-xs
+                  %span.label.label-primary DROP-IN
+                  %span.clickable more details
+    %script#addressSuggestionTemplate{:type => "html/text"}
+      %h4 We found many of these... Which one should we use?
+      %div{"data-bind" => "foreach:$data.searchOptions().possibleAddresses"}
+        .single-address-suggestion
+          %span.clickable{"data-bind" => "text:name, click:$parent.setManualAddress", :style => "color:black"}
+
+
+
+    .details-header{"data-bind" => "visible: !isListVisible(), with: details()", :style => "display:none"}
+      / ko if: activity() != null
+      .container
+        / Header Start
+        .row
+          .col-md-2.col-sm-3.col-xs-3
+            %img.logo.link{"data-bind" => "click: $parent.goBack", :src => "/styles/images/PLAY_logo.png"}/
+            .clickable.centered{"data-bind" => "click: $parent.goBack"}
+              %strong
+                %span.glyphicon.glyphicon-arrow-left
+                Back to search
+          .col-md-10.col-sm-9.col-xs-9
+            %h3{"data-bind" => "html: activity().Name"}
+            .clearfix
+            %span.offered
+              Offered by:
+              %strong{"data-bind" => "text: activity().Organization.Name"}
+            .visible-md.hidden-xs
+              .addthis_toolbox.addthis_default_style.addthis_32x32_style.add_this.share-box
+                %a.addthis_button_facebook
+                %a.addthis_button_twitter
+                %a.addthis_button_google
+                %a.addthis_button_compact
+        / Header End
+      %hr.page-break/
+      .container
+        .row
+          / General Info - Start
+          .col-md-6.col-sm-6
+            .loading.loading-activity-details
+            %strong Description
+            .long-description
+              %h1.label.label-primary{"data-bind" => "visible: activity().DropIn"} DROP-IN
+              %br/
+              %p{"data-bind" => "text: activity().Description"}
+              %p.hidden{"data-bind" => "html: activity().Organization.GeneralActivityDescription"}
+              %p{"data-bind" => "visible: (activity().Organization.ServiceLink)"}
+                %a{"data-bind" => "attr: {href: activity().Organization.ServiceLink}", :target => "_blank"} Customer Service
+            %hr/
+            .row
+              .col-md-4.col-sm-6
+                %strong Ages
+                %br/
+                Ages from
+                %span{"data-bind" => "text: convertToYears(activity().AgeFrom)"}
+                to
+                %span{"data-bind" => "text:convertToYears(activity().AgeTo)"}
+              .col-md-4.col-sm-6
+                %strong Fees
+                %br/
+                %div{"data-bind" => "foreach: activity().Fees"}
+                  %span{"data-bind" => "text: (Description) ? Description : Name"}>
+                  \: $
+                  %span{"data-bind" => "text: Cost.toFixed(2) "}
+                  %br/
+              .col-md-4.col-sm-12.schedule
+                .heading
+                  %i
+                  %span{"data-bind" => "text: displayDate(activity().SelectedTime.StartDate)"}
+                  \-
+                  %span{"data-bind" => "text: displayDate(activity().SelectedTime.EndDate)"}
+                .days
+                  %span{"data-bind" => "visible: activity().SelectedTime.Monday"} Mondays,
+                  %span{"data-bind" => "visible: activity().SelectedTime.Tuesday"} Tuesdays,
+                  %span{"data-bind" => "visible: activity().SelectedTime.Wednesday"} Wednesdays,
+                  %span{"data-bind" => "visible: activity().SelectedTime.Thursday"} Thursdays,
+                  %span{"data-bind" => "visible: activity().SelectedTime.Friday"} Fridays,
+                  %span{"data-bind" => "visible: activity().SelectedTime.Saturday"} Saturdays,
+                  %span{"data-bind" => "visible: activity().SelectedTime.Sunday"} Sundays
+                  %br/
+                  %span{"data-bind" => "text: displayTime(activity().SelectedTime.StartDate)"}
+                  \-
+                  %span{"data-bind" => "text: displayTime(activity().SelectedTime.EndDate)"}
+                .clearfix
+            %hr/
+          / General Info - Ends
+          / Facility Info - Start
+          .col-md-3.col-sm-6{:style => "min-width:270px !important;"}
+            %address
+              %strong{"data-bind" => "text: activity().Resource.Facility.Name"}
+              %br/
+              %span{"data-bind" => "text: activity().Resource.Facility.Address"}
+              %br/
+              %a{"data-bind" => "attr: { href: mapUrlTemplate.replace('#LOCATION#', activity().Resource.Facility.Address) }", :target => "_blank"} Larger Map
+              %br/
+              %div{"data-bind" => "visible: activity().Resource.Facility.Phone "}
+                %abbr{:title => "Phone"} P:
+                %span{"data-bind" => "text: activity().Resource.Facility.Phone"}
+            #mapviewer{:style => "position:relative;width:280px; height:200px;"}
+            #drivingDirections{"data-bind" => "visible: drivingDistance().length > 0"}
+              %span.muted
+                %a.clickable{"data-bind" => "click: showDrivingInstructions"} driving directions 
+              %span.travelDistance{"data-bind" => "text:drivingDistance"}
+            #walkingDirections{"data-bind" => "visible: walkingDistance().length > 0"}
+              %span.muted
+                %a.clickable{"data-bind" => "click: showWalkingInstructions"} walking directions
+              %span.travelDistance{"data-bind" => "text:walkingDistance"}
+            .directions-instructions{"data-bind" => "visible: displayInstructionsType().length > 0"}
+              %span{"data-bind" => "text:displayInstructionsType()"}
+              Instructions
+              %i.glyphicon.glyphicon-remove{"data-bind" => "click:clearInstructions", :title => "Clear Instructions"}
+            .instructions{"data-bind" => "foreach:displayInstructions"}
+              .step
+                .icon
+                  %i{"data-bind" => "class: $parent.getRoadIconClass($data)"}
+                .description
+                  .muted.distance
+                    %span{"data-bind" => "text:travelDistance.toFixed(2)"}
+                    kms
+                  %p.instruction{"data-bind" => "text: instruction.text"}
+                .clearfix
+          / Facility Info - ends
+          / Other activities - Start
+          .clearfix.visible-md
+          %hr.page-break.visible-sm/
+          .col-md-3.col-sm-12.other-activities
+            .clearfix
+            %strong Other Activities at this Location:
+            %div{"data-bind" => "foreach: otherActivities"}
+              .mini-activity
+                .title
+                  %span.clickable{"data-bind" => "text: Name,click: function(data) {$root.goToActivity(data, true)}"}
+                .description{"data-bind" => "text:Description"}
+          / Other Activities - ends
+      / /ko
+
+
+
+
+
+
+
+
+
+
+
+
+      %footer.page__footer
+        - if content_for? :footer
+          = yield :footer
+        - else
+          = render 'layouts/footer'
+    = render 'layouts/javascripts'

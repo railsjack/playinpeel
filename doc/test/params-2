@@ -1,0 +1,55 @@
+
+cd /Work/playinpeel
+
+heroku run console --app play-in-peel
+
+heroku run rake db:mongoid:create_indexes  --app play-in-peel
+
+
+
+
+
+heroku restart --app play-in-peel
+
+params = {
+	'lat'=>'43.62419891357422',
+	'lon'=>'-79.59480285644531',
+	'rd'=>'100',
+	'ageFrom'=>'0',
+	'ageTo'=>'660',
+	'dateFrom'=>'01-01-2015',
+	'dateTo'=>'03-31-2015',
+	'k'=>'',
+	'days'=>'true,true,true,true,true,true,true',
+	'timesOfDay'=>'true,true',
+	'activityTypes'=>'true,true',
+	'sortby'=>'1',
+	'skip'=>'0',
+	'take'=>'20',
+	'callback'=>'jQuery19006611803087871522_1424750781330',
+	'_'=>'1424750781333'
+}
+
+
+Activity.search(params)
+
+
+Activity.where(
+	{
+	 "$and" =>
+	 [
+      {
+        "$or"=>[
+          "Times.StartDate"=>{"$gte"=>Date.strptime(params['dateFrom'],'%m-%d-%Y')},
+          "Times.EndDate"=>{"$lte"=>Date.strptime(params['dateTo'],'%m-%d-%Y')}
+        ]
+      }
+   ]
+	}
+).count
+
+
+Activity.where("Times.StartDate" => {"$gte"=>Date.strptime("01-01-2015",'%m-%d-%Y'), "$lte"=>Date.strptime("03-31-2015",'%m-%d-%Y')  }).count
+
+Facility.destroy_all
+Activity.destroy_all

@@ -1,0 +1,54 @@
+params = {
+	'lat'=>'43.62419891357422',
+	'lon'=>'-79.59480285644531',
+	'rd'=>'1000000',
+	'ageFrom'=>'0',
+	'ageTo'=>'660',
+	'dateFrom'=>'01-01-2015',
+	'dateTo'=>'03-31-2015',
+	'k'=>'',
+	'days'=>'true,true,true,true,true,true,true',
+	'timesOfDay'=>'true,true',
+	'activityTypes'=>'true,false',
+	'sortby'=>'1',
+	'skip'=>'0',
+	'take'=>'20'
+}
+Activity.search(params)
+
+
+params = {
+	'rd'=>'1000000',
+	'ageFrom'=>'0',
+	'ageTo'=>'660',
+	'dateFrom'=>'03-01-1915',
+	'dateTo'=>'03-02-2025',
+	'k'=>'',
+	'days'=>'true,true,true,true,true,true,true',
+	'timesOfDay'=>'true,true',
+	'activityTypes'=>'true,false',
+	'sortby'=>'1',
+	'skip'=>'0',
+	'take'=>'20',
+}
+Activity.search(params)
+
+params_default = {
+  'rd'=> '100',
+  'ageFrom'=> '0',
+  'ageTo'=> '660',
+  'dateFrom'=> '6-12-1999',
+  'dateTo'=> '6-12-2020',
+  'k'=> '',
+  'days'=> 'true,true,true,true,true,true,true',
+  'timesOfDay'=> 'true,true',
+  'activityTypes'=> 'true,false',
+  'sortby'=> '1',
+  'skip'=> '0',
+  'take'=>'20'
+}
+Activity.search(params_default)
+
+
+
+Activity.last

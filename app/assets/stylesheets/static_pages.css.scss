@@ -1,0 +1,14 @@
+// Place all the styles related to the static_pages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.temp-result{
+	width: 500px;
+	height: 300px;
+	position: fixed;
+	top: 10px;
+	left: 0;
+	border: solid 1px red;
+	z-index: 1000;
+	max-height: 300px;
+}

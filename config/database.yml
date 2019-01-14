@@ -1,0 +1,20 @@
+default: &default
+  adapter: postgresql
+  hostname: 172.16.1.86
+  encoding: unicode
+  pool: 5
+  username: postgres
+  password: postgres
+
+development:
+  <<: *default
+  database: <%= Rails.application.config.settings.app_name %>_development
+
+test:
+  <<: *default
+  database: <%= Rails.application.config.settings.app_name %>_test
+
+production:
+  <<: *default
+  database: <%= Rails.application.config.settings.app_name %>_production
+

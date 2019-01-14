@@ -1,0 +1,122 @@
+﻿body {margin-top:4px;}
+.regular-font-size{font-size:14px;}
+.small-font-size{font-size:12px;}
+.page-break {border-bottom:2px solid #efefef; margin:0px 0px 5px 0px ;}
+.intro blockquote {padding-bottom:5px; margin-bottom:5px;}
+.clickable {color: #7F3F98;cursor:pointer;}
+.logo {width:95%;}
+.share-box { padding:10px 5px ;}
+.centered {text-align:center;}
+/*Search Options*/
+.search-options .title{text-align:center; font-weight:bold}
+.search-options .divider {margin:8px 0;}
+.search-options .days-buttons {width:100% !important}
+.search-options .timeofday-buttons {width:100% !important}
+.search-options .timeofday-buttons button{width:50% !important}
+.search-options .btn-search{width: 100%;}
+.dummy-readonly {background-color:#fff !important;}
+.dummy-readonly:hover {cursor:pointer !important;}
+
+
+ul.active-keywods {list-style:none;margin:0;padding:0; }    
+ul.active-keywods  li{ 
+        list-style:none; display:inline-block; padding:1px 5px; border:1px solid #ccc; margin:0 5px 3px 0; background-color: #f5f5f5;
+            -moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px; }
+ul.active-keywods  li span {margin-left:3px !important;}
+#addressSuggestion h4 {color: #7F3F98;}
+.single-address-suggestion {
+    padding: 3px 0 5px 0;
+    border-bottom: 1px solid #efefef; cursor:pointer;
+}
+.single-address-suggestion:hover {background: #F2F9FF;}
+/*Activities*/
+.activities{padding-top:20px;}
+.activity{padding:10px; border-bottom:1px solid #efefef;}
+.activity .info1 h4{margin:0 0 5px 0;}
+.activity .info1 .details{text-align:right; padding-right:30px;}
+.activity:hover{background: #F2F9FF;}
+.schedule {padding:0px; font-size:13px; text-align:center;margin-bottom:5px;}
+.schedule-details {margin:3px; width:32%; float:left;}
+.schedule .heading{background-color:#2492D0; padding:3px 0; color:#fff !important; font-weight:bold;}
+.schedule .days{padding:15px 0;  background-color:#F2F2F2;border: 1px solid #E5E5E5;}
+/* Other Activities*/
+.mini-activity{ border: 1px solid #E5E5E5;padding:5px;margin: 10px 0;}
+.mini-activity:hover{background: #F2F9FF;}
+.mini-activity .title{ font-weight: bold;}
+.mini-activity .description{ padding-left: 3px;}
+
+/* details page */
+.details-header h3{color: #7F3F98;padding:0px;margin:5px 0 0 0;}
+.details-header .offered {background-color: #d9edf7; color:#333;-moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px;padding:2px 10px;}
+
+
+/** Directions */
+.directions-instructions {
+    font-size:large;
+    font-weight:bold;
+    padding:20px 0 10px 0;
+    color:#08C;
+}
+
+    .directions-instructions i {
+        margin-top: 3px;
+        cursor: pointer;
+    }
+
+.instructions {margin-top:10px;}
+
+    .instructions .step {
+        border-top: 1px dotted #ddd;
+    }
+    .instructions .step:hover {
+        background: #F2F9FF;
+    }
+
+.instructions .step .icon{
+    float: left;
+    padding-top:10px;
+    width:15%;
+}
+
+.instructions .step .icon .road-location{
+    background: url('images/road-location.png') no-repeat center;
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+}
+
+.instructions .step .icon .road-right{
+    background: url('images/road-right.png') no-repeat center;
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+}
+
+.instructions .step .icon .road-left{
+    background: url('images/road-left.png') no-repeat center;
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+}
+
+.instructions .step .icon .road-straight{
+    background: url('images/road-straight.png') no-repeat center;
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+}
+
+.instructions .step .description{
+    float: left;
+    width:85%;
+}
+
+.instructions .step .description .distance{font-size: smaller;}
+
+
+@media (max-width: 767px) {
+    .search-options {margin-bottom:5px;}
+    #all-search-options {display:none;}
+}
+
+
